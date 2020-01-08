@@ -1,8 +1,8 @@
 
 @mixin contexthelp {
-  $contexthelp-bkg: $v-panel-background-color !default;
+  $contexthelp-bkg: #102144 !default;
   $contexthelp-border: valo-border($strength: 0.8) !default;
-  $contexthelp-border-width: 4px !default;
+  $contexthelp-border-width: 0px !default;
   $contexthelp-font-family: $v-font-family !default;
   $contexthelp-arrow-size: 6px !default;
   $contexthelp-font-size: 12px !default;
@@ -36,7 +36,7 @@
 
     &.right .popupContent:after {
       background-color: transparent;
-      border: $contexthelp-border;
+      border: 1px solid #102144;
       border-left-color: transparent;
       border-top-color: transparent;
       border-bottom-color: transparent;
@@ -45,7 +45,7 @@
     }
     &.right .popupContent:before {
       background-color: transparent;
-      border: $contexthelp-border;
+      border: 1px solid #102144;
       border-left-color: transparent;
       border-top-color: transparent;
       border-bottom-color: transparent;
@@ -70,7 +70,7 @@
 
     &.left .popupContent:after {
       background-color: transparent;
-      border: $contexthelp-border;
+      border: 1px solid #102144;
       border-right-color: transparent;
       border-top-color: transparent;
       border-bottom-color: transparent;
@@ -79,7 +79,7 @@
     }
     &.left .popupContent:before {
       background-color: transparent;
-      border: $contexthelp-border;
+      border: 1px solid #102144;
       border-right-color: transparent;
       border-top-color: transparent;
       border-bottom-color: transparent;
@@ -104,7 +104,7 @@
 
     &.above .popupContent:after {
       background-color: transparent;
-      border: $contexthelp-border;
+      border: 1px solid #102144;
       border-right-color: transparent;
       border-left-color: transparent;
       border-bottom-color: transparent;
@@ -113,7 +113,7 @@
     }
     &.above .popupContent:before {
       background-color: transparent;
-      border: $contexthelp-border;
+      border: 1px solid #102144;
       border-right-color: transparent;
       border-left-color: transparent;
       border-bottom-color: transparent;
@@ -138,7 +138,7 @@
 
     &.below .popupContent:after {
       background-color: transparent;
-      border: $contexthelp-border;
+      border: 1px solid #102144;
       border-right-color: transparent;
       border-left-color: transparent;
       border-top-color: transparent;
@@ -147,7 +147,7 @@
     }
     &.below .popupContent:before {
       background-color: transparent;
-      border: $contexthelp-border;
+      border: 1px solid #102144;
       border-right-color: transparent;
       border-left-color: transparent;
       border-top-color: transparent;
@@ -159,12 +159,13 @@
       background: $contexthelp-bkg;
       border: $contexthelp-border;
       border-width: $contexthelp-border-width;
-      -moz-border-radius: 10px;
-      -webkit-border-radius: 10px;
-      border-radius: 10px;
-      padding: 2em;
-      text-shadow: #FFF 0px 1px 0px;
-      font-size: 11pt;
+      //-moz-border-radius: 10px;
+      //-webkit-border-radius: 10px;
+      //border-radius: 10px;
+      padding: 0.5em;
+      //text-shadow: #FFF 0 1px 0;
+      color: #ffffff;
+      //font-size: 11pt;
     }
 
     &.right .popupContent .helpText {

@@ -1,33 +1,16 @@
 package org.vaadin.jonatan.contexthelp.widgetset.client.ui;
 
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.EventTarget;
-import com.google.gwt.dom.client.Node;
-import com.google.gwt.dom.client.NodeList;
-import com.google.gwt.dom.client.Style;
-import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.*;
 import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.shared.GwtEvent;
-import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.event.shared.HasHandlers;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
+import com.google.gwt.event.shared.*;
+import com.google.gwt.user.client.*;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.HTML;
 import com.vaadin.client.ApplicationConnection;
-import com.vaadin.client.Util;
 import com.vaadin.client.ui.VOverlay;
-import org.vaadin.jonatan.contexthelp.widgetset.client.ui.ContextHelpEvent.BubbleHiddenEvent;
-import org.vaadin.jonatan.contexthelp.widgetset.client.ui.ContextHelpEvent.BubbleHiddenHandler;
-import org.vaadin.jonatan.contexthelp.widgetset.client.ui.ContextHelpEvent.BubbleMovedEvent;
-import org.vaadin.jonatan.contexthelp.widgetset.client.ui.ContextHelpEvent.BubbleMovedHandler;
-import org.vaadin.jonatan.contexthelp.widgetset.client.ui.ContextHelpEvent.BubbleShownEvent;
-import org.vaadin.jonatan.contexthelp.widgetset.client.ui.ContextHelpEvent.BubbleShownHandler;
+import org.vaadin.jonatan.contexthelp.widgetset.client.ui.ContextHelpEvent.*;
 
 public class VContextHelp implements NativePreviewHandler, HasHandlers {
 
@@ -41,6 +24,7 @@ public class VContextHelp implements NativePreviewHandler, HasHandlers {
     private boolean followFocus = false;
 
     private boolean hidden = true;
+    private boolean closeButton = false;
 
     private final HelpBubble bubble;
 
@@ -132,6 +116,15 @@ public class VContextHelp implements NativePreviewHandler, HasHandlers {
         if (Element.is(target)) {
             targetElement = Element.as(target);
         }
+
+        if (closeButton && bubble.isShowing() &&
+                event.getTypeInt() == Event.ONMOUSEUP &&
+                targetElement != null && bubble.getElement().isOrHasChild(targetElement) &&
+                targetElement.hasClassName("v-window-closebox")
+        ) {
+            return true;
+        }
+
         return hideOnBlur && bubble.isShowing()
                 && targetElement != null
                 && !bubble.getElement().isOrHasChild(targetElement)
@@ -266,6 +259,14 @@ public class VContextHelp implements NativePreviewHandler, HasHandlers {
         this.followFocus = followFocus;
     }
 
+    public void setCloseButton(boolean value) {
+        this.closeButton = value;
+    }
+
+    public boolean isCloseButton(boolean value) {
+        return this.closeButton;
+    }
+
     public boolean isHideOnBlur() {
         return hideOnBlur;
     }
@@ -283,7 +284,7 @@ public class VContextHelp implements NativePreviewHandler, HasHandlers {
     }
 
     private class HelpBubble extends VOverlay {
-        private static final int Z_INDEX_BASE = 90000;
+        private static final int Z_INDEX_BASE = 19999;
 
         private final HTML helpHtml;
 
@@ -323,8 +324,17 @@ public class VContextHelp implements NativePreviewHandler, HasHandlers {
         }
 
         public void setHelpText(String helpText) {
-            helpHtml.setHTML(helpText);
+            helpHtml.setHTML(closeButton ? wrapCloseButton(helpText) : helpText);
             helpHtml.setStyleName("helpText");
+        }
+
+        private String wrapCloseButton(String helpText) {
+            return "<div style=\"display: flex\">" +
+                        "<div style=\"flex-grow:1\">" + helpText + "</div>" +
+                        "<div style=\"flex-grow:0; min-width: 20px;min-height:25px\">" +
+                            "<div class=\"v-window-closebox\" style=\"border: 1px solid; border-radius: 4px; right: 8px; top: 8px; padding-right: 0; color: white;\"/>" +
+                        "</div>" +
+                    "</div>";
         }
 
         public void showHelpBubble(String componentId, String helpText, Placement placement) {

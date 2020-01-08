@@ -2,12 +2,10 @@ package org.vaadin.jonatan.contexthelp;
 
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.AbstractExtension;
-import com.vaadin.ui.AbstractField;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.UI;
-import org.vaadin.jonatan.contexthelp.widgetset.client.ui.ContextHelpServerRpc;
-import org.vaadin.jonatan.contexthelp.widgetset.client.ui.ContextHelpState;
-import org.vaadin.jonatan.contexthelp.widgetset.client.ui.Placement;
+import com.vaadin.ui.*;
+import org.vaadin.jonatan.contexthelp.widgetset.client.ui.*;
+
+import java.util.function.Consumer;
 
 /**
  * The ContextHelp component offers contextual help for fields or groups of
@@ -20,13 +18,11 @@ import org.vaadin.jonatan.contexthelp.widgetset.client.ui.Placement;
  */
 public class ContextHelp extends AbstractExtension {
 	private static final long serialVersionUID = 3852216539762314709L;
-
 	private static int helpComponentIdCounter = 0;
-
 	private HelpProvider helpProvider;
+	private Consumer<String> closeListener;
 
     private ContextHelpServerRpc rpc = new ContextHelpServerRpc() {
-
 		@Override
 		public void selectComponent(String id) {
 			getState().selectedComponentId = id;
@@ -44,9 +40,16 @@ public class ContextHelp extends AbstractExtension {
 		@Override
 		public void setHidden(boolean hidden) {
 			getState().hidden = hidden;
+
+			if (closeListener != null) {
+				closeListener.accept(getState(false).selectedComponentId);
+			}
 		}
     };
 
+	public void setCloseListener(Consumer<String> listener) {
+    	closeListener = listener;
+	}
 	
 	public ContextHelp() {
 		helpProvider = new DefaultHelpProvider();
@@ -57,6 +60,11 @@ public class ContextHelp extends AbstractExtension {
     public ContextHelpState getState() {
         return (ContextHelpState) super.getState();
     }
+
+	@Override
+	protected ContextHelpState getState(boolean markAsDirty) {
+		return (ContextHelpState) super.getState(markAsDirty);
+	}
 
 	/**
 	 * Registers a help text for a given component. The help text is in HTML
@@ -149,6 +157,10 @@ public class ContextHelp extends AbstractExtension {
 	public void setFollowFocus(boolean followFocus) {
 		getState().followFocus = followFocus;
 		getState().selectedComponentId = "";
+	}
+
+	public void setCloseButton(boolean value) {
+		getState().closeButton = value;
 	}
 
 	/**

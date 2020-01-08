@@ -27,6 +27,7 @@ public class ContextHelpConnector extends AbstractExtensionConnector implements 
             contextHelp.addBubbleShownHandler(this);
             contextHelp.setHidden(getState().hidden);
             contextHelp.setFollowFocus(getState().followFocus);
+            contextHelp.setCloseButton(getState().closeButton);
             contextHelp.setHelpKeyCode(getState().helpKey);
             contextHelp.setHideOnBlur(getState().hideOnBlur);
         }
@@ -48,6 +49,8 @@ public class ContextHelpConnector extends AbstractExtensionConnector implements 
             contextHelp.setHelpKeyCode(getState().helpKey);
         } else if (stateChangeEvent.hasPropertyChanged("hideOnBlur")) {
             contextHelp.setHideOnBlur(getState().hideOnBlur);
+        } else if (stateChangeEvent.hasPropertyChanged("closeButton")) {
+            contextHelp.setCloseButton(getState().closeButton);
         }
         if (!getState().hidden && getState().helpHTML != null) {
             showHelpBubbleDeferred();
