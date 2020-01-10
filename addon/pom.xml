@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.vaadin.jonatan</groupId>
     <artifactId>contexthelp</artifactId>
-    <version>3.0.1</version>
+    <version>3.0.2</version>
     <name>ContextHelp</name>
     <packaging>jar</packaging>
 
@@ -105,32 +105,6 @@
                     </archive>
                 </configuration>
             </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>2.1.2</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -148,99 +122,10 @@
                     </execution>
                 </executions>
             </plugin>
-
-
-            <!-- This creates a zip file of jar and sources jar. When publishing in
-                the Directory this makes sources available to maven users automatically.
-                We could also use this to package required dependecies for those poor developer
-                souls that still dont know how to use a build system that supports transient
-                dependencies... -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <finalName>${project.artifactId}-${project.version}</finalName>
-                    <appendAssemblyId>false</appendAssemblyId>
-                    <descriptors>
-                        <descriptor>assembly.xml</descriptor>
-                    </descriptors>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>assembly</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>com.vaadin</groupId>
-                <artifactId>vaadin-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                        <configuration>
-                            <skip>${skipTests}</skip>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.7</version>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-                <version>9.4.3.v20170317</version>
-                <configuration>
-                    <scanIntervalSeconds>10</scanIntervalSeconds>
-                    <stopPort>9995</stopPort>
-                    <stopKey>STOP</stopKey>
-                    <connectors>
-                        <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
-                            <port>9998</port>
-                            <maxIdleTime>60000</maxIdleTime>
-                        </connector>
-                    </connectors>
-                    <webApp>
-                        <baseResource implementation="org.eclipse.jetty.util.resource.ResourceCollection">
-                            <resourcesAsCSV>${basedir}/src/main/webapp,${basedir}/target/testwebapp</resourcesAsCSV>
-                        </baseResource>
-                    </webApp>
-                </configuration>
-            </plugin>
         </plugins>
 
         <pluginManagement>
             <plugins>
-                <!-- Compile widget set for integration testing -->
-                <plugin>
-                    <groupId>com.vaadin</groupId>
-                    <artifactId>vaadin-maven-plugin</artifactId>
-                    <version>${vaadin.version.maven}</version>
-                    <configuration>
-                        <webappDirectory>${project.build.directory}/testwebapp/VAADIN/widgetsets</webappDirectory>
-                        <extraJvmArgs>-Xmx1g -Xms1g -XX:MaxPermSize=512m</extraJvmArgs>
-                        <hostedWebapp>${project.build.directory}/testwebapp</hostedWebapp>
-                        <noServer>true</noServer>
-                        <runTarget>http://localhost:9998/</runTarget>
-                        <draftCompile>true</draftCompile>
-                        <style>PRETTY</style>
-                        <module>org.vaadin.jonatan.contexthelp.widgetset.ContexthelpWidgetset</module>
-
-                        <strict>true</strict>
-                    </configuration>
-
-                </plugin>
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <configuration>
@@ -253,7 +138,7 @@
                         </excludes>
                     </configuration>
                 </plugin>
-            </plugins>
+        </plugins>
         </pluginManagement>
 
     </build>
@@ -327,18 +212,6 @@
             <artifactId>vaadin-themes</artifactId>
             <version>${vaadin.version.maven}</version>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-webapp</artifactId>
-            <version>9.4.3.v20170317</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet.jsp</groupId>
-            <artifactId>jsp-api</artifactId>
-            <version>2.2</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 

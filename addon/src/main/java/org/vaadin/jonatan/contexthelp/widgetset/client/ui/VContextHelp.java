@@ -329,9 +329,9 @@ public class VContextHelp implements NativePreviewHandler, HasHandlers {
         }
 
         private String wrapCloseButton(String helpText) {
-            return "<div style=\"display: flex\">" +
+            return "<div style=\"display: flex; align-items: center\">" +
                         "<div style=\"flex-grow:1\">" + helpText + "</div>" +
-                        "<div style=\"flex-grow:0; min-width: 20px;min-height:25px\">" +
+                        "<div style=\"flex-grow:0; min-width: 25px;min-height:25px\">" +
                             "<div class=\"v-window-closebox\" style=\"border: 1px solid; border-radius: 4px; right: 8px; top: 8px; padding-right: 0; color: white;\"/>" +
                         "</div>" +
                     "</div>";
