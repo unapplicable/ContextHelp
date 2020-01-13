@@ -52,6 +52,7 @@ public class VContextHelp implements NativePreviewHandler, HasHandlers {
         suppressHelpForIE();
 
         bubble = new HelpBubble();
+        invokeDebugger();
         scrollUpdater = new Timer() {
             public void run() {
                 bubble.updatePositionIfNeeded();
@@ -144,6 +145,7 @@ public class VContextHelp implements NativePreviewHandler, HasHandlers {
     }
 
     private void openBubble() {
+        invokeDebugger();
         scrollUpdater.cancel();
         scrollUpdater.scheduleRepeating(SCROLL_UPDATER_INTERVAL);
         setHidden(false);
