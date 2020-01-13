@@ -52,7 +52,6 @@ public class VContextHelp implements NativePreviewHandler, HasHandlers {
         suppressHelpForIE();
 
         bubble = new HelpBubble();
-        invokeDebugger();
         scrollUpdater = new Timer() {
             public void run() {
                 bubble.updatePositionIfNeeded();
@@ -145,11 +144,14 @@ public class VContextHelp implements NativePreviewHandler, HasHandlers {
     }
 
     private void openBubble() {
-        invokeDebugger();
-        scrollUpdater.cancel();
-        scrollUpdater.scheduleRepeating(SCROLL_UPDATER_INTERVAL);
+        restartScrollUpdater();
         setHidden(false);
         fireBubbleMovedEvent(getHelpElement().getId());
+    }
+
+    private void restartScrollUpdater() {
+        scrollUpdater.cancel();
+        scrollUpdater.scheduleRepeating(SCROLL_UPDATER_INTERVAL);
     }
 
     private void closeBubble() {
@@ -160,6 +162,7 @@ public class VContextHelp implements NativePreviewHandler, HasHandlers {
 
     public void showHelpBubble(String componentId, String helpText, Placement placement) {
         bubble.showHelpBubble(componentId, helpText, placement);
+        restartScrollUpdater();
     }
 
     public void hideHelpBubble() {
@@ -192,12 +195,6 @@ public class VContextHelp implements NativePreviewHandler, HasHandlers {
         $doc.onhelp = function () {
             return false;
         }
-    }-*/;
-
-    public native void invokeDebugger()
-    /*-{
-        console.log('bla');
-        debugger;
     }-*/;
 
     private Element findHelpElement(String id) {
@@ -363,7 +360,6 @@ public class VContextHelp implements NativePreviewHandler, HasHandlers {
         }
 
         public void updatePositionIfNeeded() {
-            invokeDebugger();
             if (isAttached() && !hidden && helpElement != null) {
                 if (elementLeft != helpElement.getAbsoluteLeft() || elementTop != helpElement.getAbsoluteTop()) {
                     calculateAndSetPopupPosition();
