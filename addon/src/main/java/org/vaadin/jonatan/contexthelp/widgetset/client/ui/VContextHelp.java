@@ -192,6 +192,12 @@ public class VContextHelp implements NativePreviewHandler, HasHandlers {
         }
     }-*/;
 
+    public native void invokeDebugger()
+    /*-{
+        console.log('bla');
+        debugger;
+    }-*/;
+
     private Element findHelpElement(String id) {
         if (id == null || id.length() == 0) {
             return null;
@@ -355,6 +361,7 @@ public class VContextHelp implements NativePreviewHandler, HasHandlers {
         }
 
         public void updatePositionIfNeeded() {
+            invokeDebugger();
             if (isAttached() && !hidden && helpElement != null) {
                 if (elementLeft != helpElement.getAbsoluteLeft() || elementTop != helpElement.getAbsoluteTop()) {
                     calculateAndSetPopupPosition();
