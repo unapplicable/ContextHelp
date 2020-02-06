@@ -160,8 +160,8 @@ public class VContextHelp implements NativePreviewHandler, HasHandlers {
         bubble.hide();
     }
 
-    public void showHelpBubble(String componentId, String helpText, Placement placement) {
-        bubble.showHelpBubble(componentId, helpText, placement);
+    public void showHelpBubble(String componentId, String helpText, Placement placement, int horizontalOffset) {
+        bubble.showHelpBubble(componentId, helpText, placement, horizontalOffset);
         restartScrollUpdater();
     }
 
@@ -299,6 +299,7 @@ public class VContextHelp implements NativePreviewHandler, HasHandlers {
         private int elementLeft;
 
         private Placement placement;
+        private int horizontalOffset;
 
         public HelpBubble() {
             super(false, false); // autoHide, modal
@@ -342,8 +343,9 @@ public class VContextHelp implements NativePreviewHandler, HasHandlers {
                     "</div>";
         }
 
-        public void showHelpBubble(String componentId, String helpText, Placement placement) {
+        public void showHelpBubble(String componentId, String helpText, Placement placement, int horizontalOffset) {
             this.placement = placement;
+            this.horizontalOffset = horizontalOffset;
             helpElement = findHelpElement(componentId);
             if (helpElement != null) {
                 show();
@@ -404,12 +406,14 @@ public class VContextHelp implements NativePreviewHandler, HasHandlers {
         private int getLeft(Placement placement) {
             switch (placement) {
                 case RIGHT:
-                    return helpElement.getAbsoluteLeft() + helpElement.getOffsetWidth();
+                    return helpElement.getAbsoluteLeft() + helpElement.getOffsetWidth() + horizontalOffset;
                 case LEFT:
-                    return helpElement.getAbsoluteLeft() - bubble.getOffsetWidth();
+                    return helpElement.getAbsoluteLeft() - bubble.getOffsetWidth() + horizontalOffset;
                 case ABOVE:
                 case BELOW:
-                    return helpElement.getAbsoluteLeft() + helpElement.getOffsetWidth() / 2 - bubble.getOffsetWidth() / 2;
+                    return helpElement.getAbsoluteLeft() + helpElement.getOffsetWidth() / 2 - bubble.getOffsetWidth() / 2 + horizontalOffset;
+                case BELOW_LEFT:
+                    return helpElement.getAbsoluteLeft() - bubble.getOffsetWidth() / 2 + horizontalOffset;
             }
             return 0;
         }

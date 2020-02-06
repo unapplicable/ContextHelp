@@ -1,12 +1,10 @@
 package org.vaadin.jonatan.contexthelp.widgetset.client.ui;
 
 import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.vaadin.client.ServerConnector;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.communication.StateChangeEvent;
 import com.vaadin.client.extensions.AbstractExtensionConnector;
-import com.vaadin.event.ShortcutAction;
 import com.vaadin.shared.ui.Connect;
 import org.vaadin.jonatan.contexthelp.ContextHelp;
 
@@ -60,12 +58,7 @@ public class ContextHelpConnector extends AbstractExtensionConnector implements 
     }
 
     private void showHelpBubbleDeferred() {
-        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-            public void execute() {
-                contextHelp.showHelpBubble(getState().selectedComponentId,
-                        getState().helpHTML, getState().placement);
-            }
-        });
+        Scheduler.get().scheduleDeferred(() -> contextHelp.showHelpBubble(getState().selectedComponentId, getState().helpHTML, getState().placement, getState().horizontalOffset));
     }
 
     @Override

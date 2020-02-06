@@ -20,4 +20,6 @@ public class ContextHelpState extends AbstractComponentState {
     public Placement placement = null;
 
     public boolean closeButton = false;
+
+    public int horizontalOffset = 0;
 }
