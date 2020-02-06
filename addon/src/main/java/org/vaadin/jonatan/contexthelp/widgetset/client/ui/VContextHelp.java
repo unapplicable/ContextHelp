@@ -400,7 +400,13 @@ public class VContextHelp implements NativePreviewHandler, HasHandlers {
             for (Placement p : Placement.values()) {
                 removeStyleName(p.name().toLowerCase());
             }
-            addStyleName(placement.name().toLowerCase());
+
+            String placementName = placement.name().toLowerCase();
+            int indexOfUnderscore = placementName.indexOf('_');
+            if (indexOfUnderscore != -1) {
+                placementName = placementName.substring(0, indexOfUnderscore);
+            }
+            addStyleName(placementName);
         }
 
         private int getLeft(Placement placement) {
@@ -426,6 +432,7 @@ public class VContextHelp implements NativePreviewHandler, HasHandlers {
                 case ABOVE:
                     return helpElement.getAbsoluteTop() - bubble.getOffsetHeight();
                 case BELOW:
+                case BELOW_LEFT:
                     return helpElement.getAbsoluteTop() + helpElement.getOffsetHeight();
             }
             return 0;
